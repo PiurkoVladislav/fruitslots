@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Fruit Slots</string>
+    <string name="faceboock_app_id">774931659504588</string>
+    <!--<string name="app_metrica_id">41d0d78b-b75d-4a53-adc8-936beb0fea01</string>-->
+    <string name="app_metrica_id">41d0d78bb75d4a53adc8936beb0fea01</string>
+
+</resources>
