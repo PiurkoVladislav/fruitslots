@@ -92,6 +92,7 @@ eclipse {
         buildCommand "com.android.ide.eclipse.adt.PreCompilerBuilder"
         buildCommand "org.eclipse.jdt.core.javabuilder"
         buildCommand "com.android.ide.eclipse.adt.ApkBuilder"
+
     }
 }
 // sets up the Android Idea project, using the old Ant based build.
@@ -140,4 +141,6 @@ dependencies {
 //    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
 //    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
 //    implementation 'com.google.code.gson:gson:2.8.5'
+
+
 }

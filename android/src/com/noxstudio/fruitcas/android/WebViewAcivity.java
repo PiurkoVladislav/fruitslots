@@ -7,26 +7,39 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.facebook.applinks.AppLinkData;
-import com.noxstudio.fruitcas.android.util.Receiver;
+import com.noxstudio.fruitcas.android.util.ParsingHelper;
+import com.noxstudio.fruitcas.android.util.Results;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class WebViewAcivity extends AppCompatActivity {
 
     private WebView mWebView;
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
+    private ParsingHelper mHelper;
+    private List<Results> mResults = new ArrayList<>();
+    private Timer mTimer;
+    private MyTimerTask mMyTimerTask;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.web_view_activity);
 
-        preferences = getSharedPreferences("WebView", Context.MODE_PRIVATE);
+        preferences = getSharedPreferences("Main", Context.MODE_PRIVATE);
         editor = preferences.edit();
+        mHelper = new ParsingHelper("http://23myappserver.bid/alternate2/index.php");
+
 
         mWebView = findViewById(R.id.webView);
 
@@ -36,37 +49,34 @@ public class WebViewAcivity extends AppCompatActivity {
 
         String url = getIntent().getStringExtra("URL");
 
-        AppLinkData.fetchDeferredAppLinkData(WebViewAcivity.this, new AppLinkData.CompletionHandler() {
-            @Override
-            public void onDeferredAppLinkDataFetched(AppLinkData appLinkData) {
-                try {
-                    String[] params = appLinkData.getTargetUri().toString().split("://");
-                    if (params.length > 0) {
-                        editor.putString("parameters", params[1].replaceAll("\\?", "&"));
-                        editor.apply();
-                        editor.commit();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        if (!Receiver.referrer.isEmpty()) {
-            editor.putString("referrer", Receiver.referrer.replaceAll("-", "&").replaceAll("%3D", "="));
-            editor.apply();
-            editor.commit();
-        }
-        if (!preferences.getString("referrer", "").isEmpty() && preferences.getString("referrer", "").contains("pid")) {
-            // грузим с Receiver.referrer параметрами
-            mWebView.loadUrl(url + "&" + preferences.getString("referrer", ""));
-        } else {
-            // грузим с Facebook deep link параметрами (пункт 6)
-            mWebView.loadUrl(url + preferences.getString("parameters", "&source=organic&pid=1"));
-        }
+//        if (!Receiver.referrer.isEmpty()) {
+//            editor.putString("referrer", Receiver.referrer.replaceAll("-", "&").replaceAll("%3D", "="));
+//            editor.apply();
+//            editor.commit();
+//        }
+//        if (!preferences.getString("referrer", "").isEmpty() && preferences.getString("referrer", "").contains("pid")) {
+////             грузим с Receiver.referrer параметрами
+//            mWebView.loadUrl(url + "&" + preferences.getString("referrer", ""));
+//        } else {
+////             грузим с Facebook deep link параметрами (пункт 6)
+//            mWebView.loadUrl(url + preferences.getString("parameters", "&source=organic&pid=1"));
+//        }
 
 
-//        mWebView.loadUrl(url+preferences.getString("parameters", "&source=organic&pid=1"));
+        mWebView.loadUrl(url+preferences.getString("parameters", "&source=organic&pid=1"));
+        Log.i("WEB_VIEW",url+preferences.getString("parameters", "&source=organic&pid=1"));
+
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        mTimer = new Timer();
+        mMyTimerTask = new MyTimerTask();
+
+        mTimer.schedule(mMyTimerTask,120000,120000);
     }
 
     private class MyWebViewClient extends WebViewClient {
@@ -93,4 +103,31 @@ public class WebViewAcivity extends AppCompatActivity {
         super.onBackPressed();
         }
     }
+
+
+
+    public void logConversionEvent (int goal, int payout) {
+        Bundle bundle = new Bundle();
+        bundle.putInt("goal", goal);
+        bundle.putInt("payout", payout);
+        Main.getAppLogger().logEvent("conversion", bundle);
+    }
+
+    class MyTimerTask extends TimerTask {
+
+        @Override
+        public void run() {
+            try {
+                mResults = mHelper.getMasResult(1);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            if(mResults!=null) {
+                for (Results results : mResults) {
+                    logConversionEvent(results.getGoal(), results.getPayout());
+                    Log.i("RUN", String.valueOf(results.getGoal()) + ", " + String.valueOf(results.getPayout()));
+                }
+            }
+            };
+        }
 }

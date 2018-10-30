@@ -88,8 +88,11 @@ public class FruitSlots extends ScreenAdapter {
 	private boolean isAutoPlayClicked = false;
 	private boolean isButtonMaxBet = false;
 
+	private boolean buttonIsPressed;
+
 	private int tick;
 	private int slotsStopTick;
+	private int tickToch;
 	
 
 
@@ -163,11 +166,12 @@ public class FruitSlots extends ScreenAdapter {
 		maxBetButton.addListener(new InputListener() {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-            			isAutoPlayClicked = !isAutoPlayClicked;
-                    	spinSlots();
-					}
+					isAutoPlayClicked = !isAutoPlayClicked;
+					spinSlots();
+            }
 			@Override
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+				buttonIsPressed = Gdx.input.isButtonPressed(button);
 				return true;
 			}
 		});
@@ -356,10 +360,13 @@ public class FruitSlots extends ScreenAdapter {
 		winFont.draw(batch,"WIN: "+win,(Constants.width/2) - winFont.getSpaceWidth()*7,
 //                        -(Constants.quarterScreenHeight/2),
 				Constants.height/2 - (Constants.quarterScreenHeight) - Constants.quarterScreenHeight/1.7f);
-        if(isAutoPlayClicked&&isSlotsStop()&&isChecked&&tick>=slotsStopTick){
-			spinSlots();
+		if(tickToch >= 30) {
+			if (tick == tickToch && isAutoPlayClicked) {
+				if (isAutoPlayClicked && isSlotsStop() && isChecked && tick >= slotsStopTick) {
+					spinSlots();
+				}
+			}
 		}
-
 
 		batch.end();
 //        moneyFont.draw(batch,""+balace,(Constants.width/2)-(3*Constants.quarterScreenHeight-Constants.quarterScreenHeight/4),Constants.height/2 + Constants.height/3+Constants.quarterScreenHeight/4);
@@ -372,6 +379,9 @@ public class FruitSlots extends ScreenAdapter {
 				Constants.height/2 - (Constants.quarterScreenHeight) - Constants.quarterScreenHeight/1.7f);
 		batch.end();
 		tick++;
+		if(buttonIsPressed) {
+			tickToch++;
+		}
 
 	}
 
