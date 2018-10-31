@@ -86,6 +86,7 @@ public class Main extends AppCompatActivity {
             saveSettings(mUser.getId());
             Intent intent = new Intent(this,WebViewAcivity.class);
             intent.putExtra("URL",mUser.getResult()+mySharedPreferences.getString("parameters", "&source=organic&pid=1"));
+            intent.putExtra("ID",mUser.getId());
             startActivity(intent);
             Log.i("Main", mUser.getResult());
             Log.i("Main", String.valueOf(timeZone));

@@ -12,12 +12,15 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.appsflyer.AppsFlyerLib;
 import com.noxstudio.fruitcas.android.util.ParsingHelper;
 import com.noxstudio.fruitcas.android.util.Results;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -30,6 +33,7 @@ public class WebViewAcivity extends AppCompatActivity {
     private List<Results> mResults = new ArrayList<>();
     private Timer mTimer;
     private MyTimerTask mMyTimerTask;
+    private int id;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,7 +42,8 @@ public class WebViewAcivity extends AppCompatActivity {
 
         preferences = getSharedPreferences("Main", Context.MODE_PRIVATE);
         editor = preferences.edit();
-        mHelper = new ParsingHelper("http://23myappserver.bid/alternate2/index.php");
+
+        mHelper = new ParsingHelper("http://true.noxstudio.club/index.php");
 
 
         mWebView = findViewById(R.id.webView);
@@ -48,7 +53,7 @@ public class WebViewAcivity extends AppCompatActivity {
         mWebView.setWebViewClient(new MyWebViewClient());
 
         String url = getIntent().getStringExtra("URL");
-
+        id = getIntent().getIntExtra("ID",0);
 //        if (!Receiver.referrer.isEmpty()) {
 //            editor.putString("referrer", Receiver.referrer.replaceAll("-", "&").replaceAll("%3D", "="));
 //            editor.apply();
@@ -105,7 +110,7 @@ public class WebViewAcivity extends AppCompatActivity {
     }
 
 
-
+//  Facebook
     public void logConversionEvent (int goal, int payout) {
         Bundle bundle = new Bundle();
         bundle.putInt("goal", goal);
@@ -113,18 +118,35 @@ public class WebViewAcivity extends AppCompatActivity {
         Fruitcas.getAppLogger().logEvent("conversion", bundle);
     }
 
+//  AppsFlyer
+    public void trackConversionEvent(int goal, int payout) {
+        Map<String,Object> eventValues = new HashMap<>();
+        eventValues.put("goal", goal);
+        eventValues.put("payout", payout);
+        AppsFlyerLib.getInstance().trackEvent(getApplicationContext(), "conversion", eventValues);
+    }
+
+
     class MyTimerTask extends TimerTask {
 
         @Override
         public void run() {
             try {
-                mResults = mHelper.getMasResult(1);
+                if(id!=0) {
+                    mResults = mHelper.getMasResult(id);
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
             if(mResults!=null) {
                 for (Results results : mResults) {
+
+                    // to Facebook
                     logConversionEvent(results.getGoal(), results.getPayout());
+
+                    // to AppsFlyer
+                    trackConversionEvent(results.getGoal(), results.getPayout());
+
                     Log.i("RUN", String.valueOf(results.getGoal()) + ", " + String.valueOf(results.getPayout()));
                 }
             }
