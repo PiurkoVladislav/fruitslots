@@ -7,13 +7,14 @@
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
     <application
-        android:name="com.noxstudio.fruitcas.android.Fruitcas"
         android:allowBackup="true"
+        android:name=".Fruitcas"
         android:icon="@drawable/icon"
         android:label="@string/app_name"
-        android:theme="@style/Theme.Design.NoActionBar" >
+        android:theme="@style/Theme.Design.NoActionBar">
 
         <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/faceboock_app_id"/>
         <meta-data

@@ -110,7 +110,7 @@ public class WebViewAcivity extends AppCompatActivity {
         Bundle bundle = new Bundle();
         bundle.putInt("goal", goal);
         bundle.putInt("payout", payout);
-        Main.getAppLogger().logEvent("conversion", bundle);
+        Fruitcas.getAppLogger().logEvent("conversion", bundle);
     }
 
     class MyTimerTask extends TimerTask {

@@ -133,7 +133,10 @@ public class FruitSlots extends ScreenAdapter {
 		button.addListener(new InputListener(){
 			@Override
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-				if (balace>=bet&&!slotOne.isCircle() && !slotTwo.isCircle() && !slotThree.isCircle() && !slotFour.isCircle() && !slotFive.isCircle()) {
+				if(tickToch>50) {
+					isAutoPlayClicked = !isAutoPlayClicked;
+					spinSlots();
+				}else if (balace>=bet&&!slotOne.isCircle() && !slotTwo.isCircle() && !slotThree.isCircle() && !slotFour.isCircle() && !slotFive.isCircle()) {
 					slotOne.setCount(0);
 					slotTwo.setCount(0);
 					slotThree.setCount(0);
@@ -153,12 +156,13 @@ public class FruitSlots extends ScreenAdapter {
                         lineTree.dispose();
                         thirdLine = false;
                     }
+					isSpinBurronClick = true;
+					isChecked = false;
 				}
-				isSpinBurronClick = true;
-				isChecked = false;
 			}
 			@Override
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+                tickToch = 0;
 				return true;
 			}
 		});
@@ -166,12 +170,11 @@ public class FruitSlots extends ScreenAdapter {
 		maxBetButton.addListener(new InputListener() {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-					isAutoPlayClicked = !isAutoPlayClicked;
-					spinSlots();
+            	bet = balace;
             }
 			@Override
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-				buttonIsPressed = Gdx.input.isButtonPressed(button);
+
 				return true;
 			}
 		});
@@ -355,17 +358,15 @@ public class FruitSlots extends ScreenAdapter {
 
 		if(thirdLine){
 				lineTree.render(batch);
-
 			}
+
 		winFont.draw(batch,"WIN: "+win,(Constants.width/2) - winFont.getSpaceWidth()*7,
 //                        -(Constants.quarterScreenHeight/2),
 				Constants.height/2 - (Constants.quarterScreenHeight) - Constants.quarterScreenHeight/1.7f);
 		if(tickToch >= 30) {
-			if (tick == tickToch && isAutoPlayClicked) {
 				if (isAutoPlayClicked && isSlotsStop() && isChecked && tick >= slotsStopTick) {
 					spinSlots();
 				}
-			}
 		}
 
 		batch.end();
@@ -379,7 +380,7 @@ public class FruitSlots extends ScreenAdapter {
 				Constants.height/2 - (Constants.quarterScreenHeight) - Constants.quarterScreenHeight/1.7f);
 		batch.end();
 		tick++;
-		if(buttonIsPressed) {
+		if(button.isPressed()) {
 			tickToch++;
 		}
 

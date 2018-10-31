@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -39,26 +40,10 @@ public class Main extends AppCompatActivity {
     private User mUser;
     private AsyncRequest mAsyncRequest;
 
-    private static AppEventsLogger logger;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-
-//        // Создание расширенной конфигурации библиотеки.
-//        YandexMetricaConfig config = YandexMetricaConfig.newConfigBuilder(Constants.API_KEY).withLogs().build();
-//        // Инициализация AppMetrica SDK.
-//        YandexMetrica.activate(this.getApplicationContext(), config);
-//
-//        YandexMetricaPush.init(this.getApplicationContext());
-//
-//        // Отслеживание активности пользователей.
-//        YandexMetrica.enableActivityAutoTracking(this.getApplication());
-
-
-        FacebookSdk.sdkInitialize(getApplicationContext());
-        AppEventsLogger.activateApp(this);
 
         telManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
 
@@ -111,14 +96,23 @@ public class Main extends AppCompatActivity {
             startActivity(intent);
         }
 
-        logger = AppEventsLogger.newLogger(this);
-
     }
 
-    public static AppEventsLogger getAppLogger() {
-        return logger;
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+            YandexMetrica.resumeSession(this);
+        }
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+            YandexMetrica.pauseSession(this);
+        }
+    }
 
     private void saveSettings(int param){
         SharedPreferences.Editor editor = mySharedPreferences.edit();

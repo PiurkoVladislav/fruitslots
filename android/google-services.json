@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "115858990284",
+    "firebase_url": "https://fruitcas-fe8e9.firebaseio.com",
+    "project_id": "fruitcas-fe8e9",
+    "storage_bucket": "fruitcas-fe8e9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:115858990284:android:b839f74744077b35",
+        "android_client_info": {
+          "package_name": "com.noxstudio.fruitcas.android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "115858990284-lf9cvh1vfhl1p4nvgf2d9fg20ga13ltc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCPuyoCVAOqJlnJ2Q4DCTcbUVuCsKi41Cw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
