@@ -45,6 +45,9 @@ public class Main extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
+
+
+
         telManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
 
         getCountry();

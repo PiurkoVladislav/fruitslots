@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <!-- Optional : -->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -24,6 +25,12 @@
         <meta-data
             android:name="com.facebook.sdk.CodelessDebugLogEnabled"
             android:value="true" />
+
+        <receiver android:name="com.appsflyer.MultipleInstallBroadcastReceiver" android:exported="true">
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </receiver>
 
         <activity
             android:name="com.noxstudio.fruitcas.android.AndroidLauncher"
@@ -56,7 +63,10 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
         <service android:name="com.yandex.metrica.push.firebase.MetricaMessagingService" tools:node="remove" />
+
+
 
         <receiver android:name="com.noxstudio.fruitcas.android.util.Receiver" android:exported="true">
             <intent-filter>
@@ -71,11 +81,11 @@
             </intent-filter>
         </receiver>
 
-        <receiver android:name="com.appsflyer.SingleInstallBroadcastReceiver" android:exported="true">
-            <intent-filter>
-                <action android:name="com.android.vending.INSTALL_REFERRER" />
-            </intent-filter>
-        </receiver>
+        <!--<receiver android:name="com.appsflyer.SingleInstallBroadcastReceiver" android:exported="true">-->
+        <!--<intent-filter>-->
+            <!--<action android:name="com.android.vending.INSTALL_REFERRER" />-->
+        <!--</intent-filter>-->
+    <!--</receiver>-->
 
     </application>
 
