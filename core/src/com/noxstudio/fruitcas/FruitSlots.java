@@ -115,7 +115,7 @@ public class FruitSlots extends ScreenAdapter {
             }
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-            	if(isSlotsStop()&&!isAutoPlayClicked) {
+            	if(isSlotsStop()) {
 					if (x >= betButton.getPadX() && x <= betButton.getWidth() / 2) {
 						if (bet > 10 && balace - 10 > 0) {
 							bet -= 10;
