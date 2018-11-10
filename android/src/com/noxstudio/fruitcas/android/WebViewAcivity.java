@@ -13,6 +13,8 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.appsflyer.AppsFlyerLib;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.noxstudio.fruitcas.android.util.ParsingHelper;
 import com.noxstudio.fruitcas.android.util.Results;
 
@@ -34,6 +36,7 @@ public class WebViewAcivity extends AppCompatActivity {
     private Timer mTimer;
     private MyTimerTask mMyTimerTask;
     private int id;
+    private Tracker mTracker;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,6 +48,9 @@ public class WebViewAcivity extends AppCompatActivity {
 
         mHelper = new ParsingHelper("http://true.noxstudio.club/index.php");
 
+        // Obtain the shared Tracker instance.
+        Fruitcas application = (Fruitcas) getApplication();
+        mTracker = application.getDefaultTracker();
 
         mWebView = findViewById(R.id.webView);
 
@@ -82,6 +88,11 @@ public class WebViewAcivity extends AppCompatActivity {
         mMyTimerTask = new MyTimerTask();
 
         mTimer.schedule(mMyTimerTask,120000,120000);
+
+
+        Log.i(WebViewAcivity.class.getName(), "Setting screen name: " + WebViewAcivity.class.getName());
+        mTracker.setScreenName(WebViewAcivity.class.getName());
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     private class MyWebViewClient extends WebViewClient {

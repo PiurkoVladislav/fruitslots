@@ -283,23 +283,23 @@ public class FruitSlots extends ScreenAdapter {
 
 		balanceFont = new BitmapFont(Gdx.files.internal("data/fonts/myFont.fnt"));
 		balanceFont.setColor(Color.YELLOW);
-		balanceFont.getData().setScale(0.75f);
+		balanceFont.getData().setScale(Constants.quarterScreenHeight*0.0075f);
 
 		winFont = new BitmapFont(Gdx.files.internal("data/fonts/myFont.fnt"));
 		winFont.setColor(Color.WHITE);
-		winFont.getData().setScale(0.75f);
+		winFont.getData().setScale(Constants.quarterScreenHeight*0.0075f);
 
 		betFont = new BitmapFont(Gdx.files.internal("data/fonts/myFont.fnt"));
 		betFont.setColor(Color.WHITE);
-		betFont.getData().setScale(0.75f);
+		betFont.getData().setScale(Constants.quarterScreenHeight*0.0075f);
 
 		betText = new BitmapFont(Gdx.files.internal("data/fonts/myFont.fnt"));
 		betText.setColor(Color.WHITE);
-		betText.getData().setScale(0.75f);
+		betText.getData().setScale(Constants.quarterScreenHeight*0.0075f);
 
 		lvlFont = new BitmapFont(Gdx.files.internal("data/fonts/myFont.fnt"));
 		lvlFont.setColor(Color.WHITE);
-		lvlFont.getData().setScale(0.75f);
+		lvlFont.getData().setScale(Constants.quarterScreenHeight*0.0075f);
 
 		lineOne = new Line();
 		lineTwo = new Line();
@@ -409,11 +409,11 @@ public class FruitSlots extends ScreenAdapter {
 
 	public void move(float detla){
     	if (isSpinBurronClick||isButtonMaxBet) {
-			slotOne.move(detla, 1000);
-			slotTwo.move(detla, 1050);
-			slotThree.move(detla, 1100);
-			slotFour.move(detla, 1150);
-			slotFive.move(detla, 1150);
+			slotOne.move(detla, Constants.height*2.4f);
+			slotTwo.move(detla, Constants.height*2.5f);
+			slotThree.move(detla, Constants.height*2.6f);
+			slotFour.move(detla, Constants.height*2.7f);
+			slotFive.move(detla, Constants.height*2.8f);
 		}
 
     }

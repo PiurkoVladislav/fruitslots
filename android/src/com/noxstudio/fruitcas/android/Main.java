@@ -14,6 +14,8 @@ import android.util.Log;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.applinks.AppLinkData;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.noxstudio.fruitcas.android.cons.Constants;
 import com.noxstudio.fruitcas.android.util.ParsingHelper;
 import com.noxstudio.fruitcas.android.util.User;
@@ -39,6 +41,7 @@ public class Main extends AppCompatActivity {
     private ParsingHelper mParsingHelper;
     private User mUser;
     private AsyncRequest mAsyncRequest;
+    private Tracker mTracker;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -46,7 +49,9 @@ public class Main extends AppCompatActivity {
         setContentView(R.layout.main);
 
 
-
+// Obtain the shared Tracker instance.
+        Fruitcas application = (Fruitcas) getApplication();
+        mTracker = application.getDefaultTracker();
 
         telManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
 
@@ -108,6 +113,10 @@ public class Main extends AppCompatActivity {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
             YandexMetrica.resumeSession(this);
         }
+        Log.i(Main.class.getName(), "Setting screen name: " + Main.class.getName());
+        mTracker.setScreenName(Main.class.getName());
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+
     }
 
     @Override
@@ -147,7 +156,7 @@ public class Main extends AppCompatActivity {
 
 
 
-    class AsyncRequest extends AsyncTask<Void, Void, User> {
+    private class AsyncRequest extends AsyncTask<Void, Void, User> {
 
         @Override
         protected User doInBackground(Void... voids) {
